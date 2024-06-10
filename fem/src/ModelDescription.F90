@@ -2572,7 +2572,7 @@ CONTAINS
       CHARACTER(LEN=256) :: txcmd
 
       character(len=256) :: elmer_home_env
-      CALL getenv("ELMER_HOME", elmer_home_env)
+      call get_environment_variable("ELMER_HOME", elmer_home_env)
 
       !$OMP PARALLEL Shared(parenv, ModelName, elmer_home_env) Private(txcmd, ompthread, lstat) Default(none)
       !$OMP CRITICAL
