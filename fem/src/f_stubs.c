@@ -73,3 +73,10 @@ void STDCALLBULL FC_FUNC(flush,FLUSH) (int n)
   /*  might as well flush a toilet...? */
 }
 #endif
+
+void rename_(const char* old, const char* new)
+{
+  //printf("rename_: old=%s, new=%s\n", old, new);
+  int rc = rename(old, new);
+  (void)rc;
+}

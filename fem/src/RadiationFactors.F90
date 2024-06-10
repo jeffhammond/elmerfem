@@ -34,6 +34,42 @@
 ! *
 ! *****************************************************************************/
 
+module rename_m
+    interface
+        function c_rename(old,new) result(rc) bind(C,name="rename")
+            use iso_c_binding, only : c_char
+            implicit none
+            character(kind=c_char), dimension(:), intent(in) :: old, new
+            integer :: rc
+        end function c_rename
+    end interface
+    contains
+        subroutine rename(old,new)
+            use iso_c_binding, only : c_char, c_null_char
+            implicit none
+            character(len=*), intent(in) :: old, new
+            character(kind=c_char), dimension(:), allocatable :: c_old, c_new
+            integer :: l_old, l_new, i, rc
+            l_old = len(old)
+            l_new = len(new)
+            allocate(c_old(l_old+1),c_new(l_new+1))
+            c_old = c_null_char
+            c_new = c_null_char
+            do i=1, l_old
+                c_old(i) = old(i:i)
+            end do
+            do i=1, l_new
+                c_new(i) = new(i:i)
+            end do
+            rc = c_rename(c_old,c_new)
+            if (rc .ne. 0) then
+                print*,'rename failed with error code ',rc
+                stop
+            end if
+            deallocate(c_old,c_new)
+        end subroutine rename
+end module rename_m
+
 !> \ingroup ElmerLib
 !> \{
 
@@ -553,7 +589,8 @@
 
 
      SUBROUTINE ComputeViewFactorsAndRadiators()
-
+        !use rename_m
+        implicit none
        CHARACTER(:), ALLOCATABLE :: cmd, OutputName, OutputName2
        LOGICAL :: DoScale
        INTEGER :: i,j

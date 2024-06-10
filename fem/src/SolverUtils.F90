@@ -24204,7 +24204,7 @@ CONTAINS
        ! Check that we have not given the path relative to home directory
        ! because the code does not understand the meaning of tilde.
        IF( OutputDirectory(1:2) == '~/') THEN
-         CALL GETENV('HOME',Str)
+         call get_environment_variable('HOME',Str)
          OutputDirectory = TRIM(Str)//'/'//OutputDirectory(3:nd)
          nd = LEN_TRIM(OutputDirectory)
        END IF
